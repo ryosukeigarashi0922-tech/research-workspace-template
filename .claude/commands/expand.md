@@ -10,7 +10,7 @@ assess coverage against project scope, and develop a research plan for gaps.
 
 Output:
 - `flow/<project>/literature-review.md` — Per-file evaluation + lifecycle recommendations
-- `flow/<project>/research-plan.md` — Cumulative research plan (Wave management)
+- `flow/<project>/research-plan.md` — Cumulative research plan (flat backlog management)
 
 Target project: $ARGUMENTS (ask if not specified)
 
@@ -70,8 +70,10 @@ review-batch-N ──┘
    - All files in `flow/<project>/`
    - All files in `stock/<project>/` (if exists)
 3. Check `flow/<project>/research-plan.md`:
-   - **Exists**: Read previous Wave number & item statuses -> **incremental update mode**
-   - **Doesn't exist**: **new creation mode** (start from Wave 1)
+   - **Exists**: Read backlog statuses -> **incremental update mode**
+     - Detect old Wave format (heuristic: `Current wave:` header, `Q\d+-\d+` IDs, `## Wave \d+` sections)
+     - If old format -> auto-migrate using `/run` Migration Procedure before proceeding
+   - **Doesn't exist**: **new creation mode**
 4. Check `flow/<project>/literature-review.md`:
    - **Exists**: Load previous review, re-review only changed files
    - **Doesn't exist**: Full review of all files
@@ -275,6 +277,8 @@ Add a 1-sentence reason for why each angle matters.
      - **Priority**: High / Medium / Low (impact on deliverables x execution feasibility)
      - **Estimated time**: DR=5-10min, Analysis=30-60min, etc.
      - **Dependencies**: Does it require results from other items?
+     - **Added**: today's date (YYYY-MM-DD)
+     - **Source**: `expand`
 
 2. **Attach prompt drafts for DR items** (per CLAUDE.md Deep Research integration rules)
    - Research objective (1-2 sentences)
@@ -335,7 +339,7 @@ Lead directly executes remaining output work.
 # Research Plan
 > Project: <project-name>
 > Last updated: YYYY-MM-DD
-> Current wave: N
+> Investigation purpose: [from README section 1]
 
 ## Coverage Assessment
 | Area | Coverage | Supporting Files | Assessment |
@@ -344,20 +348,32 @@ Lead directly executes remaining output work.
 | B. xxx | 40% | dr-xxx.md | DR output only |
 | C. xxx | 0%  | — | Not started |
 
-## Wave N (YYYY-MM-DD)
-### New Research Items
-| # | Research Item | Method | Priority | Status | Output |
-|---|-------------|--------|----------|--------|--------|
-| QN-1 | ... | DR | High | pending | dr-xxx.md |
-| QN-2 | ... | Analysis | Medium | pending | xxx.md |
+## Backlog
 
-### DR Prompts
-#### QN-1: [Research item name]
-- Objective: ...
-- Prompt (English):
+### High Priority
+| # | Research Item | Method | Priority | Status | Output | Depends | Added | Source |
+|---|-------------|--------|----------|--------|--------|---------|-------|--------|
+| Q-N | ... | DR | High | pending | dr-xxx.md | — | YYYY-MM-DD | expand |
+
+### Medium Priority
+(same format)
+
+### Low Priority
+(same format)
+
+## Dependencies
+Q-X → Q-Y (reason)
+
+## DR Prompts
+### Q-N: [Research item name]
+- **Objective**: ...
+- **Prompt (English)**:
   > ...
-- Expected output: ...
-- Save to: flow/<project>/dr-<topic>.md
+- **Expected output**: ...
+- **Save to**: flow/<project>/dr-<topic>.md
+
+## Execution Log
+(empty — populated by `/run`)
 ```
 
 ### Incremental Update Mode (when existing files present)
@@ -368,10 +384,12 @@ Lead directly executes remaining output work.
 - Recalculate review summary
 
 **research-plan.md:**
-- Update existing Wave statuses: if output file exists, change pending -> done
+- Detect old Wave format -> auto-migrate using `/run` Migration Procedure first
+- Update existing item statuses: if output file exists, `pending` -> `done`
 - Recalculate coverage assessment
-- Add new Wave section (increment Wave number)
-- Preserve past Wave sections (maintain as history)
+- Append new items to Backlog (continue from max Q-N ID)
+- Add `Added: today`, `Source: expand` to new items
+- Merge new dependencies into Dependencies section
 
 ## Phase 6: Finalize
 
@@ -383,5 +401,6 @@ Lead directly executes remaining output work.
    - Coverage change summary (comparison with previous in incremental mode)
    - New research item count and priority breakdown
    - If lifecycle recommendations exist, suggest using `/promote` `/archive`
+   - If pending backlog items exist: "Run `/run <project>` to execute pending research items"
    - "Run `/expand <project>` again after completing research to re-evaluate"
    - "Changes are not committed. Run `git commit` after review."

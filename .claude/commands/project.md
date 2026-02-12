@@ -47,7 +47,7 @@ Once project is identified, load the following in parallel:
    - All files in `flow/<project>/` (if exists)
    - All files in `stock/<project>/` (if exists)
 3. **literature-review.md** — Check existence (if present, read summary section)
-4. **research-plan.md** — Check existence (if present, read current wave and status)
+4. **research-plan.md** — Check existence (if present, read backlog status counts: pending/done/blocked)
 
 ## Phase 3: Status Dashboard
 
@@ -69,7 +69,7 @@ Compose and display the following dashboard from collected information:
 
 ### Progress Indicators
 - Literature Review: [Available (last updated: YYYY-MM-DD) / None]
-- Research Plan: [Wave N (pending X / done Y) / None]
+- Research Plan: [Backlog: pending X / done Y / blocked Z / None]
 - flow files: X, stock files: Y
 
 ### Current Focus (README section 9)
@@ -88,7 +88,7 @@ Suggest executable commands based on project state:
 | literature-review.md has lifecycle recommendations | `/curate <project>` — Execute file organization based on recommendations |
 | flow/ has reviewed files | `/promote <project>` — Graduate deliverables to stock/ |
 | flow/ has unnecessary files | `/archive` — Move unnecessary files to archive/ |
-| research-plan.md has pending items | "N pending research items awaiting DR execution" |
+| research-plan.md has pending items | `/run <project>` — N pending research items ready for execution |
 | Neither flow/ nor stock/ exists | `/new-project <project>` — Initialize project |
 
 ### Display Format
@@ -96,7 +96,7 @@ Suggest executable commands based on project state:
 ```
 ### Next Actions
 1. `/expand <project>` — Literature Review has not been conducted yet
-2. Research item Q2-3 (DR, high priority) is pending — see research-plan.md
+2. `/run <project>` — N pending research items ready for execution
 3. `/promote <project>` — Files ready for stock promotion
 ```
 

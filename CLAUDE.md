@@ -29,7 +29,7 @@ Manage information by lifecycle stage, organized by project.
 
 ### File Placement Rules (follow when creating new files)
 0. Unsorted external files -> `inbox/`, route with `/intake`
-0.5. Research plan -> `flow/<project>/research-plan.md` (generated/updated by `/expand`)
+0.5. Research plan -> `flow/<project>/research-plan.md` (generated/updated by `/expand`, executed by `/run`)
 0.6. Literature review -> `flow/<project>/literature-review.md` (generated/updated by `/expand`)
 0.7. File curation -> Execute literature-review.md recommendations with `/curate`
 1. DR raw output -> `flow/<project>/dr-<topic>.md`
